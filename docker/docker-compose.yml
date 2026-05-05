@@ -11,7 +11,10 @@ services:
     env_file:
       - .env # ✅ LOAD ENV FILE
     environment:
-      - GROQ_API_KEY=${GROQ_API_KEY} # ✅ PASS KEY
+      - GROQ_API_KEY=${GROQ_API_KEY}
+      - SERPAPI_KEY=${SERPAPI_KEY}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
 
   frontend:
     build:
