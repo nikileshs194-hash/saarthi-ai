@@ -3,8 +3,6 @@ uvicorn
 requests
 beautifulsoup4
 google-search-results
-openai
-python-dotenv
 groq
 sqlalchemy
 psycopg2-binary
