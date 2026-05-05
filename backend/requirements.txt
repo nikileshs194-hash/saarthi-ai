@@ -1,0 +1,17 @@
+fastapi
+uvicorn
+requests
+beautifulsoup4
+google-search-results
+openai
+python-dotenv
+groq
+sqlalchemy
+psycopg2-binary
+redis
+faiss-cpu
+sentence-transformers
+numpy
+bcrypt
+python-jose[cryptography]
+google-auth
