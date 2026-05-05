@@ -37,17 +37,23 @@ export default function Home() {
 
     try {
       const headers = buildAuthHeaders();
-      const [historyRes, recentRes, popularRes, recRes] = await Promise.all([
+      const results = await Promise.allSettled([
         fetch("http://localhost:8000/search-history", { headers }),
         fetch("http://localhost:8000/recent-searches", { headers }),
         fetch("http://localhost:8000/popular-searches", { headers }),
         fetch("http://localhost:8000/recommendations", { headers })
       ]);
 
-      const readJson = async (res, fallback) => {
-        if (!res.ok) {
+      const readJson = async (settled, fallback) => {
+        if (settled.status !== "fulfilled") return fallback;
+        const res = settled.value;
+        if (res.status === 401) {
+          localStorage.removeItem("token");
+          setIsAuthenticated(false);
+          setAuthWarning("Session expired. Please sign in again.");
           return fallback;
         }
+        if (!res.ok) return fallback;
         try {
           return await res.json();
         } catch {
@@ -55,10 +61,10 @@ export default function Home() {
         }
       };
 
-      setHistory(await readJson(historyRes, []));
-      setRecent(await readJson(recentRes, []));
-      setPopular(await readJson(popularRes, []));
-      setRecommended(await readJson(recRes, []));
+      setHistory(await readJson(results[0], []));
+      setRecent(await readJson(results[1], []));
+      setPopular(await readJson(results[2], []));
+      setRecommended(await readJson(results[3], []));
     } catch (error) {
       console.error("Could not load discovery data", error);
     }
